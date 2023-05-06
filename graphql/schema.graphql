@@ -1,0 +1,53 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+
+  equipos(id: Int @where(operator:"like")): [Equipos!]! @paginate(defaultCount:10)
+  jugadores(id: Int @where(operator:"like")): [Jugadores!]! @paginate(defaultCount:10)
+
+}
+
+"Account of a person who utilizes this application."
+type User {
+    "Unique primary key."
+    id: ID!
+
+    "Non-unique name."
+    name: String!
+
+    "Unique email address."
+    email: String!
+
+    "When the email was verified."
+    email_verified_at: DateTime
+
+    "When the account was created."
+    created_at: DateTime!
+
+    "When the account was last updated."
+    updated_at: DateTime!
+}
+
+type Equipos{
+  id: ID!
+  nombre: String!
+  liga: String!
+  partidos_jugados: Int
+  partidos_ganados: Int
+  partidos_perdidos: Int
+  puntos_total: Int
+  jugadores: [Jugadores!]! @hasMany(relation: "jugador")
+}
+
+type Jugadores{
+  id: ID!
+  equipo: Equipos! @belongsTo(relation: "equipo")
+  nombre: String!
+  apellido: String!
+  edad: Int
+  goles_marcados: Int
+  tarjetas_amarillas: Int
+  tarjetas_rojas: Int
+}
